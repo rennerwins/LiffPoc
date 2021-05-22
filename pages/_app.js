@@ -1,12 +1,21 @@
 import '../styles/globals.css';
-// import liff from '@line/liff';
 import * as React from 'react';
 
+const liffId = process.env.NEXT_PUBLIC_LIFF_ID;
+
 function MyApp({ Component, pageProps }) {
-  // console.log('liff', liff);
   React.useEffect(async () => {
     const liff = (await import('@line/liff')).default;
-    console.log('liff:', liff);
+
+    try {
+      await liff.init({ liffId });
+    } catch (error) {
+      console.error('liff init error', error.message);
+    }
+
+    if (!liff.isLoggedIn()) {
+      liff.login();
+    }
   }, []);
 
   return <Component {...pageProps} />;
