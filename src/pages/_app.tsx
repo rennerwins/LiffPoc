@@ -1,8 +1,8 @@
 import type { AppProps } from 'next/app';
 import * as React from 'react';
 import { RecoilRoot } from 'recoil';
-import '../../styles/globals.css';
 import { OnBoarding } from '../components';
+import '../../styles/globals.css';
 import 'swiper/swiper.min.css';
 
 const liffId = process.env.NEXT_PUBLIC_LIFF_ID;
