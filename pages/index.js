@@ -9,7 +9,6 @@ export default function Home() {
     const liff = (await import('@line/liff')).default;
     await liff.ready;
     const profile = await liff.getProfile();
-    console.log('profile:', profile.);
     setProfile(profile);
   }, [profile.userId]);
 
@@ -21,9 +20,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1>Profile</h1>
-        <p>
-          {profile.displayName}
-        </p>
+        <p>{profile.displayName}</p>
       </main>
     </div>
   );
