@@ -4,7 +4,6 @@ import { RecoilRoot } from 'recoil';
 import '../../styles/globals.css';
 import { OnBoarding } from '../components';
 import 'swiper/swiper.min.css';
-import 'swiper/components/pagination/pagination.min.css';
 
 const liffId = process.env.NEXT_PUBLIC_LIFF_ID;
 

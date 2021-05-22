@@ -1,41 +1,20 @@
 import * as React from 'react';
 import { Button } from '../button/button';
-import SwiperCore, { Pagination } from 'swiper/core';
+import SwiperCore, { Navigation } from 'swiper/core';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
 
-SwiperCore.use([Pagination]);
+SwiperCore.use([Navigation]);
 
 const solarImages = [
-  'solar1.jpeg',
-  'solar2.jpeg',
-  'solar3.jpeg',
-  'solar4.jpeg',
+  'https://images.unsplash.com/photo-1501494278684-d0fb421388ef',
+  'https://images.unsplash.com/photo-1620492948585-c97e18c173dc',
+  'https://images.unsplash.com/flagged/photo-1566838616631-f2618f74a6a2',
+  'https://images.unsplash.com/photo-1592833159155-c62df1b65634',
 ];
 
 export const OnBoarding = () => {
-  const [currentIndex, setCurrentIndex] = React.useState(0);
-  const swiperRef = React.useRef(null);
-
-  const handleNextSlide = () => {
-    if (swiperRef) {
-      const swiper = swiperRef.current.swiper;
-      if (swiper.activeIndex < solarImages.length) {
-        swiper.slideNext(100, true);
-        setCurrentIndex(swiper.activeIndex);
-      }
-    }
-  };
-
-  const handlePrevSlide = () => {
-    if (swiperRef) {
-      const swiper = swiperRef.current.swiper;
-      if (swiper.activeIndex !== 0) {
-        swiper.slidePrev(100, true);
-        setCurrentIndex(swiper.activeIndex);
-      }
-    }
-  };
+  const [isLastSlide, setIsLastSlide] = React.useState(false);
 
   const handleLogin = async () => {
     const liff = (await import('@line/liff')).default;
@@ -43,31 +22,46 @@ export const OnBoarding = () => {
     liff.login();
   };
 
+  const handleSlideChange = (slide: SwiperCore) => {
+    setIsLastSlide(slide.activeIndex === solarImages.length - 1);
+  };
+
   return (
-    <div className="h-screen flex flex-col">
-      <div className="flex-1">
-        <Swiper className="h-full" ref={swiperRef} slidesPerView={1} pagination>
-          {solarImages.map((image, index) => (
+    <div className="h-screen">
+      <div className="h-5/6">
+        <Swiper
+          className="h-full"
+          slidesPerView={1}
+          navigation={{
+            prevEl: '.prev',
+            nextEl: '.next',
+          }}
+          onActiveIndexChange={handleSlideChange}
+        >
+          {solarImages.map((image) => (
             <SwiperSlide key={image}>
-              <Image src={`/assets/${image}`} layout="fill" objectFit="cover" />
+              <Image
+                src={image}
+                blurDataURL={image}
+                placeholder="blur"
+                layout="fill"
+                objectFit="cover"
+                loading="eager"
+              />
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
-      <footer className="py-10 px-4 flex justify-between space-x-4">
-        <Button className="w-1/2" onClick={handlePrevSlide}>
-          Prev
-        </Button>
-        {currentIndex !== solarImages.length - 1 ? (
-          <Button className="w-1/2" onClick={handleNextSlide}>
-            Next
-          </Button>
+      <div className="py-10 px-4 flex justify-between space-x-4">
+        <Button className="prev w-1/2">Prev</Button>
+        {!isLastSlide ? (
+          <Button className="next w-1/2">Next</Button>
         ) : (
-          <Button className="w-1/2 bg-red-400" onClick={handleLogin}>
+          <Button className="w-1/2" onClick={handleLogin}>
             Login
           </Button>
         )}
-      </footer>
+      </div>
     </div>
   );
 };
